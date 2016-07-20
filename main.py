@@ -11,7 +11,9 @@ firefoxPath = 'C:/Program Files/Mozilla Firefox/Firefox.exe'
 url = 'http://localhost:5000'
 
 #get location
-location = raw_input('Enter your location, or type "auto" (no quotes) to ise IP location: ')
+print('Below you will provide your location. This can be an address, coordinates, or anything you would type into google maps.')
+print('You can also type "auto" (no quotes) to use your IP location, although this has poor accuracy.')
+location = raw_input('\nEnter your location: ')
 if location == 'auto':
     print('Getting IP location...')
     r = requests.get('http://freegeoip.net/json')
@@ -27,17 +29,17 @@ if location == 'auto':
 username = ''
 password = ''
 
-loginType = raw_input('Do you want to log in with Google (google) or Pokemon Trainer Club (ptc): ').lower()
+loginType = raw_input('\nDo you want to log in with Google (google) or Pokemon Trainer Club (ptc): ').lower()
 while (loginType != 'google') and (loginType != 'ptc'):
-    loginType = raw_input('Invalid login type. Please choose either google or ptc: ').lower()
+    loginType = raw_input('\nInvalid login type. Please choose either google or ptc: ').lower()
 
 if(loginType == 'google'):
-    username = raw_input('Enter your Google username (ommit the @gmail.com): ')
+    username = raw_input('\nEnter your Google username (ommit the @gmail.com): ')
     username += '@gmail.com'
 
     password = getpass('Enter your Google password: ')
 elif(loginType == 'ptc'):
-    username = raw_input('Enter your Pokemon Trainer Club username: ')
+    username = raw_input('\nEnter your Pokemon Trainer Club username: ')
 
     password = getpass('Enter your Pokemon Trainer Club password: ')
 
