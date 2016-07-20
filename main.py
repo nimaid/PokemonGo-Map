@@ -34,8 +34,7 @@ while (loginType != 'google') and (loginType != 'ptc'):
     loginType = raw_input('\nInvalid login type. Please choose either google or ptc: ').lower()
 
 if(loginType == 'google'):
-    username = raw_input('\nEnter your Google username (ommit the @gmail.com): ')
-    username += '@gmail.com'
+    username = raw_input('\nEnter your Google username (Example: foobar@gmail.com): ')
 
     password = getpass('Enter your Google password: ')
 elif(loginType == 'ptc'):
