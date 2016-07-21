@@ -108,6 +108,10 @@ elif filterRaw == 'B':
     pokemon = raw_input('\nPokemon to hide: ').replace(' ', '')
     cmdStr += pokemon
 
+#give warning
+print('\nIf no browser pops up after about 10 seconds, manually type "localhost:5000" into a browser.')
+raw_input('Press enter to run the program...')   
+
 #start the script
 subprocess.Popen(cmdStr)
 
