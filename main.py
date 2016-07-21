@@ -50,7 +50,22 @@ elif(loginType == 'ptc'):
     password = getpass('Enter your Pokemon Trainer Club password: ')
 
 #initialize the command string
-cmdStr = 'C:\Python27\python.exe {} -a {} -u {} -p {} -l "{}" -st 10 -ar 5'.format(serverScript, loginType, username, password, location)
+cmdStr = 'C:\Python27\python.exe {} -a {} -u {} -p {} -l "{}" -ar 5'.format(serverScript, loginType, username, password, location)
+
+#ask for search radius
+print('\nBelow you will enter the search radius limit, in steps.')
+print('Each step is equal to 50 meters.')
+print('A higher number here will mean the maps takes longer to populate and refresh.')
+print('A good starting point to try is 10 steps.')
+steps = raw_input('\nEnter search radius limit: ')
+while not steps.isdigit():
+    steps = raw_input('Invalid number. Enter search radius limit: ')
+
+steps = int(steps)
+if steps == 0:
+    steps = 1
+
+cmdStr += ' -st {}'.format(steps)
 
 #ask if display gyms
 dgRaw = raw_input('\nDo you want to display gyms (Y/N): ').upper()
