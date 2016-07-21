@@ -43,11 +43,11 @@ while (loginType != 'google') and (loginType != 'ptc'):
 if(loginType == 'google'):
     username = raw_input('\nEnter your Google username (Example: foobar@gmail.com): ')
 
-    password = getpass('Enter your Google password: ')
+    password = getpass('Enter your Google password (will be invisible): ')
 elif(loginType == 'ptc'):
     username = raw_input('\nEnter your Pokemon Trainer Club username: ')
 
-    password = getpass('Enter your Pokemon Trainer Club password: ')
+    password = getpass('Enter your Pokemon Trainer Club password (will be invisible): ')
 
 #initialize the command string
 cmdStr = 'C:\Python27\python.exe {} -a {} -u {} -p {} -l "{}" -ar 5'.format(serverScript, loginType, username, password, location)
@@ -125,7 +125,8 @@ elif filterRaw == 'B':
 
 #give warning
 print('\nIf no browser pops up after about 10 seconds, manually type "localhost:5000" into a browser.')
-raw_input('Press enter to run the program...')   
+print('Also, if no pokemon show up after a while, make sure the servers aren\'t down...')
+raw_input('\nPress enter to start the search!...')   
 
 #start the script
 subprocess.Popen(cmdStr)
