@@ -59,12 +59,14 @@ elif useSavedLogin == 'N':
         login['type'] = raw_input('\nInvalid login type. Please choose either google or ptc: ').lower()
 
     if(login['type'] == 'google'):
-        login['username'] = raw_input('\nEnter your Google username (Example: foobar@gmail.com): ')
+        login['username'] = raw_input('\nEnter your Google username (Example: foobar@gmail.com, or just foobar): ')
+        if login['username'].find('@') == -1:
+            login['username'] += '@gmail.com'
     elif(login['type'] == 'ptc'):
         login['username'] = raw_input('\nEnter your Pokemon Trainer Club username: ')
 
     #ask if save login
-    saveLogin = raw_input('\nDo you want to save this login (Y/N): ').upper()
+    saveLogin = raw_input('\nDo you want to save this login for next time (Y/N): ').upper()
     while (saveLogin != 'Y') and (saveLogin != 'N'):
         saveLogin = raw_input('Invalid choice. Save login (Y/N): ').upper()
 
@@ -74,9 +76,9 @@ elif useSavedLogin == 'N':
 loginFile.close
 
 if login['type'] == 'google':
-    password = getpass('Enter your password for your Google account "{}" (will be invisible): '.format(login['username']))
+    password = getpass('\nEnter your password for your Google account "{}" (will be invisible): '.format(login['username']))
 elif login['type'] == 'ptc':
-    password = getpass('Enter your password for your Pokemon Trainer Club account "{}" (will be invisible): '.format(login['username']))
+    password = getpass('\nEnter your password for your Pokemon Trainer Club account "{}" (will be invisible): '.format(login['username']))
 
 #test if there are saved settings
 useSaved = 'N'
