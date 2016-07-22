@@ -17,13 +17,17 @@ full_path = os.path.realpath(__file__)
 (path, filename) = os.path.split(full_path)
 pokemonsJSON = json.load(open(path + '/locales/pokemon.' + locale + '.json'))
 
+loginFile = open(path + '/user/login.json', 'r+')
+loginJSON = json.load(loginFile)
+loginFile.seek(0)
+
 settingsFile = open(path + '/user/settings.json', 'r+')
 settingsJSON = json.load(settingsFile)
 settingsFile.seek(0)
 
 #get location
 print('Below you will provide your location. This can be an address, coordinates, or anything you would type into google maps.')
-print('You can also type "auto" (no quotes) to use your IP location, although this has poor accuracy.')
+print('You can also type "auto" (no quotes) to use your IP location, although this has terrible accuracy.')
 location = raw_input('\nEnter your location: ')
 if location == 'auto':
     print('Getting IP location...')
@@ -36,30 +40,51 @@ if location == 'auto':
 
     print('Your IP location is {}'.format(location))
 
-#get login type and details
-username = ''
+#ask if use saved login
+useSavedLogin = 'N'
+if not loginJSON['new']:
+    useSavedLogin = raw_input('\nDo you want to use "{}" (Y/N): '.format(loginJSON['username'])).upper()
+    while (useSavedLogin != 'Y') and (useSavedLogin != 'N'):
+        useSavedLogin = raw_input('Invalid choice. Use "{}" (Y/N): '.format(loginJSON['username'])).upper()
+
+login = {'new': False}
 password = ''
 
-loginType = raw_input('\nDo you want to log in with Google (google) or Pokemon Trainer Club (ptc): ').lower()
-while (loginType != 'google') and (loginType != 'ptc'):
-    loginType = raw_input('\nInvalid login type. Please choose either google or ptc: ').lower()
+if useSavedLogin == 'Y':
+    login = loginJSON
+elif useSavedLogin == 'N':
+    #get login type and details
+    login['type'] = raw_input('\nDo you want to log in with Google (google) or Pokemon Trainer Club (ptc): ').lower()
+    while (login['type'] != 'google') and (login['type'] != 'ptc'):
+        login['type'] = raw_input('\nInvalid login type. Please choose either google or ptc: ').lower()
 
-if(loginType == 'google'):
-    username = raw_input('\nEnter your Google username (Example: foobar@gmail.com): ')
+    if(login['type'] == 'google'):
+        login['username'] = raw_input('\nEnter your Google username (Example: foobar@gmail.com): ')
+    elif(login['type'] == 'ptc'):
+        login['username'] = raw_input('\nEnter your Pokemon Trainer Club username: ')
 
-    password = getpass('Enter your Google password (will be invisible): ')
-elif(loginType == 'ptc'):
-    username = raw_input('\nEnter your Pokemon Trainer Club username: ')
+    #ask if save login
+    saveLogin = raw_input('\nDo you want to save this login (Y/N): ').upper()
+    while (saveLogin != 'Y') and (saveLogin != 'N'):
+        saveLogin = raw_input('Invalid choice. Save login (Y/N): ').upper()
 
-    password = getpass('Enter your Pokemon Trainer Club password (will be invisible): ')
+    if saveLogin == 'Y':
+        loginFile.write(json.dumps(login))
+
+loginFile.close
+
+if login['type'] == 'google':
+    password = getpass('Enter your password for your Google account "{}" (will be invisible): '.format(login['username']))
+elif login['type'] == 'ptc':
+    password = getpass('Enter your password for your Pokemon Trainer Club account "{}" (will be invisible): '.format(login['username']))
 
 #test if there are saved settings
 useSaved = 'N'
 if not settingsJSON['new']:
     #ask if use saved settings
     useSaved = raw_input('\nDo you want to use saved settings (Y/N): ').upper()
-while (useSaved != 'Y') and (useSaved != 'N'):
-    useSaved = raw_input('Invalid choice. Use saved settings (Y/N): ').upper()
+    while (useSaved != 'Y') and (useSaved != 'N'):
+        useSaved = raw_input('Invalid choice. Use saved settings (Y/N): ').upper()
 
 settings = {'new':False}
 if useSaved == 'N':
@@ -137,13 +162,13 @@ if useSaved == 'N':
         pokemon = raw_input('\nPokemon to hide: ').replace(' ', '')
         settings['fpokemon'] = pokemon
 
-        #ask if save settings
-        saveRaw = raw_input('\nDo you want to save these settings for next time (Y/N): ').upper()
-        while (saveRaw != 'Y') and (saveRaw != 'N'):
-            saveRaw = raw_input('Invalid choice. Save settings (Y/N): ')
+    #ask if save settings
+    saveRaw = raw_input('\nDo you want to save these settings for next time (Y/N): ').upper()
+    while (saveRaw != 'Y') and (saveRaw != 'N'):
+        saveRaw = raw_input('Invalid choice. Save settings (Y/N): ')
 
-        if saveRaw == 'Y':
-            settingsFile.write(json.dumps(settings))
+    if saveRaw == 'Y':
+        settingsFile.write(json.dumps(settings))
 
 elif useSaved == 'Y':
     settings = settingsJSON
@@ -151,8 +176,8 @@ elif useSaved == 'Y':
 #build command string
 #initialize the command string
 cmdStr = 'C:\Python27\python.exe {}'.format(serverScript)
-cmdStr += ' -a {}'.format(loginType)
-cmdStr += ' -u {}'.format(username)
+cmdStr += ' -a {}'.format(login['type'])
+cmdStr += ' -u {}'.format(login['username'])
 cmdStr += ' -p {}'.format(password)
 
 cmdStr += ' -l "{}"'.format(location)
