@@ -220,10 +220,12 @@ os.system('cls')
 if exposeRaw == 'N':
     print('If no browser pops up after about 10 seconds, manually type "localhost:{}" into a browser.'.format(port))
     print('Note that this will only be visible on your computer.')
+    print('Close this window when you\'re done.')
 elif exposeRaw == 'Y':
     print('After about 10 seconds, a second window will pop up. Let both run.')
     print('Find the URL in this new window in the form of http://xxxxxxxx.ngrok.io')
     print('You can type this URL into any browser, even your phone\'s!')
+    print('Close both windows when you\'re done.')
 print('\nAlso, if no pokemon show up after a while, make sure the servers aren\'t down...')
 raw_input('\nPress enter to start the search!...')
 os.system('cls')
