@@ -1,6 +1,6 @@
 import webbrowser
 from getpass import getpass
-import subprocess
+from subprocess import *
 from time import sleep
 import requests
 import json
@@ -8,14 +8,18 @@ import os
 
 chromePath = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 firefoxPath = 'C:/Program Files/Mozilla Firefox/Firefox.exe'
-url = 'http://localhost:5000'
+port = 5000
+ngrokTitle = 'Use the http://xxxxxxxx.ngrok.io address!'
 serverScript = 'example.py'
 locale = 'en'
 refreshTime = 5
 
 full_path = os.path.realpath(__file__)
 (path, filename) = os.path.split(full_path)
-pokemonsJSON = json.load(open(path + '/locales/pokemon.' + locale + '.json'))
+
+pokemonsFile = open(path + '/locales/pokemon.' + locale + '.json')
+pokemonsJSON = json.load(pokemonsFile)
+pokemonsFile.close()
 
 loginFile = open(path + '/user/login.json', 'r+')
 loginJSON = json.load(loginFile)
@@ -73,7 +77,7 @@ elif useSavedLogin == 'N':
     if saveLogin == 'Y':
         loginFile.write(json.dumps(login))
 
-loginFile.close
+loginFile.close()
 
 if login['type'] == 'google':
     password = getpass('\nEnter your password for your Google account "{}" (will be invisible): '.format(login['username']))
@@ -203,34 +207,57 @@ if settings['filter'] != 'A':
 #close the settings file
 settingsFile.close()
 
+#ask if expose server to the internet
+print('\nBelow you will choose whether to expose your server to the internet.')
+print('If you do, it will create a URL from which you can view your server, anywhere in the world, on any device.')
+print('If you don\'t, it will just run locally, and your browser will open to the map.')
+exposeRaw = raw_input('\nDo you want to expose your server to the internet (Y/N): ').upper()
+while (exposeRaw != 'Y') and (exposeRaw != 'N'):
+    exposeRaw = raw_input('Invalid choice. Expose to internet (Y/N): ').upper()
+
 #give warning
-print('\nIf no browser pops up after about 10 seconds, manually type "localhost:5000" into a browser.')
-print('Also, if no pokemon show up after a while, make sure the servers aren\'t down...')
-raw_input('\nPress enter to start the search!...')   
+os.system('cls')
+if exposeRaw == 'N':
+    print('If no browser pops up after about 10 seconds, manually type "localhost:{}" into a browser.'.format(port))
+    print('Note that this will only be visible on your computer.')
+elif exposeRaw == 'Y':
+    print('After about 10 seconds, a second window will pop up. Let both run.')
+    print('Find the URL in this new window in the form of http://xxxxxxxx.ngrok.io')
+    print('You can type this URL into any browser, even your phone\'s!')
+print('\nAlso, if no pokemon show up after a while, make sure the servers aren\'t down...')
+raw_input('\nPress enter to start the search!...')
+os.system('cls')
 
 #start the script
-subprocess.Popen(cmdStr)
+Popen(cmdStr)
 
 #wait
 sleep(10)
 
-#launch the webpage
-chrome = False
-firefox = False
+if exposeRaw == 'Y':
+    #start ngrok
+    ngrok = 'start "{}" "{}/ngrok.exe" http {}'.format(ngrokTitle, path, port)
+    os.system(ngrok)
+elif exposeRaw == 'N':
+    #launch the webpage
+    chrome = False
+    firefox = False
 
-try:
-    chrome = webbrowser.get(chromePath)
-except:
-    print('INFO: Chrome not found. (It\'s okay to ignore this.)')
-    
-try:
-    firefox = webbrowser.get(firefoxPath)
-except:
-    print('INFO: Firefox not found. (It\'s okay to ignore this.)')
+    try:
+        chrome = webbrowser.get(chromePath)
+    except:
+        print('INFO: Chrome not found. (It\'s okay to ignore this.)')
+        
+    try:
+        firefox = webbrowser.get(firefoxPath)
+    except:
+        print('INFO: Firefox not found. (It\'s okay to ignore this.)')
 
-if chrome != False:
-    chrome.open(url)
-elif firefox != False:
-    firefox.open(url)
-else:
-    webpage.open(url)
+    url = 'http:\\localhost:{}'.format(port)
+
+    if chrome != False:
+        chrome.open(url)
+    elif firefox != False:
+        firefox.open(url)
+    else:
+        webpage.open(url)
