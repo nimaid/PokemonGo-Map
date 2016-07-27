@@ -1,15 +1,2 @@
-#Easy To Use Pokemon Go Map for Windows Users#
-
-I just made a nice python wrapper for [the proof of concept script](https://github.com/AHAAAAAAA/PokemonGo-Map) and made a batch script to take care of the setup stuff.
-
-##Usage##
-1. Install [Python 2.7](https://www.python.org/) (NOT Python 3.x).
-2. Download or clone this project.
-3. Run "Live Pokemon Go Map.bat"
-4. Follow the prompts.
-5. Close the terminal when you are done.
-
-This script will try to use, in order: Google Chrome, Mozilla Firefox, Internet Explorer
-
-##Disclaimer##
-Using this software is against the ToS and can get you banned. Use at your own risk.
+#This project is no longer bein maintained.#
+The reason behind this is that version 2.0 of the [main project](https://github.com/AHAAAAAAA/PokemonGo-Map) makes this project obsolete, in my oppinion. It has capabilities to easily save, load, and modify the config, and allows very easy deployment and management. Go there to get it, the wiki shows how to set it up very easily. This repo only has old code, do not use the code in this repo.
