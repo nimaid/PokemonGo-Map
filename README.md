@@ -1,2 +1,2 @@
-#This project is no longer bein maintained.#
+#This project is no longer being maintained.#
 The reason behind this is that version 2.0 of the [main project](https://github.com/AHAAAAAAA/PokemonGo-Map) makes this project obsolete, in my oppinion. It has capabilities to easily save, load, and modify the config, and allows very easy deployment and management. Go there to get it, the wiki shows how to set it up very easily. This repo only has old code, do not use the code in this repo.
